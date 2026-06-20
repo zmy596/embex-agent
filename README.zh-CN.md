@@ -48,14 +48,18 @@ Embex 不是固定 demo 生成器。模型拥有固件主逻辑控制权，`agen
 | `esp_agent/knowledge/` | 板卡引脚资料和本地 RAG 知识库 |
 | `memory/` | 本地记忆目录说明 |
 | `scripts/` | smoke 测试、硬件预检、串口探测和验证脚本 |
-| `docs/` | GitHub 复现与上传说明 |
+| `docs/` | 项目结构、复现、上传和发布清单说明 |
+
+更完整的目录说明见 [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md)。
+
+根目录只保留项目入口、依赖清单、构建配置和顶层源码目录；贡献指南、安全策略和行为准则放在 `.github/` 下，发布清单放在 `docs/` 下，避免根目录混杂临时说明文件。
 
 ## 快速开始
 
 ### 1. 克隆项目
 
 ```powershell
-git clone tps://github.com/zmy596/embex-agent，git
+git clone https://github.com/zmy596/embex-agent.git
 cd embex-agent
 ```
 
@@ -213,7 +217,7 @@ npm run verify
 说明：硬件验证结果取决于开发板、USB-UART 驱动、串口占用和实际接线。
 
 
-### 项目创新点
+## 项目创新点
 
 - 记忆增强：保存硬件状态、历史对话、用户偏好、项目事实、失败案例和已验证结论，并通过上下文压缩减少长对话带来的信息噪声。
 - RAG 知识库：沉淀 ESP 板卡资料、GPIO 风险、外设规则、PlatformIO 工作流、烧录失败、串口异常、watchdog、brownout 等嵌入式开发知识。
@@ -222,7 +226,7 @@ npm run verify
 - 闭环工具链：将 PlatformIO 工程生成、编译、烧录、串口监控、日志诊断和任务验收串成统一 ReAct 流程。
 - 状态可追踪：Web 页面展示任务阶段、工具调用、失败节点、串口观测和验收判断，便于复现和答辩说明。
 
-### 软件成果可复现范围
+## 软件成果可复现范围
 
 本仓库包含可复现的软件成果：
 
@@ -240,7 +244,9 @@ npm run verify
 
 不提交 `.env`、`node_modules/`、`dist/`、`runs/`、临时固件工程、串口日志和本地大文件。评审或复现人员应通过安装命令重新生成依赖和构建产物。
 
-### 推荐验收步骤
+发布文件纳入和排除规则见 [docs/RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md)，当前发布快照文件清单见 [docs/RELEASE_FILE_LIST.txt](docs/RELEASE_FILE_LIST.txt)。
+
+## 推荐验收步骤
 
 ```powershell
 npm install

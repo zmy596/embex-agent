@@ -48,15 +48,19 @@ Typical peripherals:
 | `esp_agent/knowledge/` | Board pinouts and local RAG knowledge base |
 | `memory/` | Local memory directory metadata |
 | `scripts/` | Smoke tests, hardware readiness checks, serial probe, and verification scripts |
-| `docs/` | GitHub reproducibility and upload notes |
+| `docs/` | Project structure, reproducibility, upload, and release checklist notes |
+
+For a fuller directory guide, see [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md).
+
+The repository root is reserved for project entry points, dependency manifests, build configuration, and top-level source directories. Contribution, security, and conduct documents live under `.github/`; release file lists live under `docs/`. This keeps the root directory concise and predictable.
 
 ## Quick Start
 
 ### 1. Clone
 
 ```powershell
-git clone https://github.com/<your-name>/embex.git
-cd embex
+git clone https://github.com/zmy596/embex-agent.git
+cd embex-agent
 ```
 
 ### 2. Setup
@@ -249,6 +253,8 @@ This repository contains the reproducible software artifact:
 
 The repository intentionally excludes `.env`, `node_modules/`, `dist/`, `runs/`, temporary firmware projects, serial logs, and local large files. Reviewers should reproduce dependencies and build artifacts through the documented commands.
 
+For release include/exclude rules, see [docs/RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md). For the current release snapshot, see [docs/RELEASE_FILE_LIST.txt](docs/RELEASE_FILE_LIST.txt).
+
 ### Suggested Acceptance Steps
 
 ```powershell
@@ -279,7 +285,7 @@ The full hardware loop requires local USB serial access, board drivers, the targ
 
 ### Submission Notes
 
-- Put source code, README files, dependency files, setup scripts, knowledge samples, verification scripts, and community files in the GitHub repository.
+- Put source code, README files, dependency files, setup scripts, knowledge samples, verification scripts, and `.github/` community files in the GitHub repository.
 - Submit papers, videos, slides, screenshots, and large attachments through the competition submission system or GitHub Releases instead of committing large binaries to the main repository history.
 - A recommended demo should cover the Web UI, hardware configuration, model planning, `main.cpp` generation, build/upload, serial observation, failure diagnosis, and RAG/memory/Skill/MCP pages.
 - Without hardware on site, reviewers can still inspect log diagnosis, knowledge retrieval, memory state, Skill/MCP invocation, and software smoke tests; the full closed loop is reproduced with local hardware.

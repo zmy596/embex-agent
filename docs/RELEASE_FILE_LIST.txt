@@ -1,11 +1,17 @@
-﻿.env.example
+﻿.editorconfig
+.env.example
+.gitattributes
+.github/CODE_OF_CONDUCT.md
+.github/CONTRIBUTING.md
 .github/ISSUE_TEMPLATE/bug_report.md
 .github/ISSUE_TEMPLATE/feature_request.md
 .github/PULL_REQUEST_TEMPLATE.md
+.github/SECURITY.md
 .gitignore
-CODE_OF_CONDUCT.md
-CONTRIBUTING.md
 docs/GITHUB_UPLOAD.md
+docs/PROJECT_STRUCTURE.md
+docs/RELEASE_CHECKLIST.md
+docs/RELEASE_FILE_LIST.txt
 docs/REPRODUCIBILITY.md
 environment.yml
 esp_agent/__init__.py
@@ -32,7 +38,6 @@ esp_agent/tools/prompt.md
 esp_agent/tools/README.md
 esp_agent/tools/schemas.json
 esp_agent/tools/selftest.py
-GITHUB_PROJECT_FILES.md
 index.html
 LICENSE
 memory/.gitkeep
@@ -48,7 +53,6 @@ public/pinouts/luatos-esp32c3-core.txt
 README.en.md
 README.md
 README.zh-CN.md
-RELEASE_FILE_LIST.txt
 requirements.txt
 scripts/capability-invocation-smoke.mjs
 scripts/hardware-preflight.mjs
@@ -67,7 +71,6 @@ scripts/task-observation-check.mjs
 scripts/usb-uart-diagnose.ps1
 scripts/verify.mjs
 scripts/verify-skill-contract.mjs
-SECURITY.md
 server/agent.ts
 server/conversationAgent.ts
 server/espPythonBridge.ts

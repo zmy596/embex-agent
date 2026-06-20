@@ -118,8 +118,10 @@ For competition or review, save:
 Recommended location:
 
 ```text
-比赛提交材料/测试结果汇总.md
+local-review-notes/测试结果汇总.md
 ```
+
+Do not commit private serial logs, generated firmware workspaces, or large rendered artifacts to the main repository. Keep them local, attach them to the competition submission system, or publish them through GitHub Releases when appropriate.
 
 ## 7. Known Limits
 
@@ -127,4 +129,3 @@ Recommended location:
 - Full hardware closed-loop execution should be reproduced locally.
 - Model output quality depends on the configured model endpoint and API key.
 - PlatformIO first build may take longer due to dependency downloads.
-
