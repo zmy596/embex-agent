@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "updated_at": "2026-06-18T18:49:42.497Z",
+  "skills": [
+    {
+      "name": "platformio_project_manager",
+      "title": "PlatformIO 工程管理",
+      "enabled": true,
+      "description": "规划、生成和检查 ESP PlatformIO 工程结构。",
+      "inputs": [
+        "board_model",
+        "framework",
+        "dependencies"
+      ],
+      "outputs": [
+        "project_plan",
+        "platformio_ini_notes"
+      ],
+      "stage": "active",
+      "category": "project",
+      "invocation": "/platformio_project_manager",
+      "examples": []
+    },
+    {
+      "name": "esp_pin_analyzer",
+      "title": "ESP 板卡与引脚分析",
+      "enabled": true,
+      "description": "根据板卡引脚资料分析 GPIO 是否适合外设连接。",
+      "inputs": [
+        "board_model",
+        "pins",
+        "peripherals"
+      ],
+      "outputs": [
+        "pin_risk_report"
+      ],
+      "stage": "active",
+      "category": "hardware",
+      "invocation": "/esp_pin_analyzer",
+      "examples": []
+    },
+    {
+      "name": "serial_log_diagnosis",
+      "title": "串口日志诊断",
+      "enabled": true,
+      "description": "分析编译、烧录和串口日志中的 ESP 常见故障。",
+      "inputs": [
+        "log",
+        "task_description"
+      ],
+      "outputs": [
+        "diagnosis",
+        "next_step"
+      ],
+      "stage": "active",
+      "category": "diagnosis",
+      "invocation": "/serial_log_diagnosis",
+      "examples": []
+    },
+    {
+      "name": "peripheral_project_composer",
+      "title": "外设组合小项目规划",
+      "enabled": true,
+      "description": "根据当前已连接并启用的外设、板卡型号和引脚配置，组合出可实现的小型嵌入式项目方案，并给出固件结构、交互逻辑和验收标准。",
+      "inputs": [
+        "board_model",
+        "port",
+        "peripherals",
+        "hardwareStatus",
+        "project_goal"
+      ],
+      "outputs": [
+        "project_idea",
+        "firmware_flow",
+        "peripheral_roles",
+        "acceptance_checks",
+        "next_prompt"
+      ],
+      "stage": "active",
+      "category": "project",
+      "invocation": "/peripheral_project_composer",
+      "examples": [
+        "/peripheral_project_composer 做一个环境监测小项目",
+        "/peripheral_project_composer 根据当前外设组合一个可演示项目"
+      ]
+    }
+  ]
+}

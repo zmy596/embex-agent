@@ -1,0 +1,11 @@
+name: yd-agent
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - nodejs=20
+  - pip
+  - pip:
+      - platformio==6.1.19
+      - pyserial==3.5

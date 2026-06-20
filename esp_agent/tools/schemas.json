@@ -1,0 +1,674 @@
+{
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "esp_resolve_board",
+        "description": "Resolve a human ESP board or module model to PlatformIO build parameters and list supported presets.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "board_model": {
+              "type": "string",
+              "description": "Human board/module model id, such as esp32-s3-n16r8, esp32-s3-n8r8, esp32-s3-n8, luatos-esp32c3-core, esp32-c3-devkitm-1, esp32-c3-devkitc-02, esp32-devkit-v1, or esp32-wrover. Used to resolve PlatformIO board, flash, PSRAM, USB CDC, and partitions.",
+              "default": "luatos-esp32c3-core"
+            },
+            "board": {
+              "type": "string",
+              "description": "Optional raw PlatformIO board id override. Leave empty to use board_model preset.",
+              "default": ""
+            },
+            "flash_size": {
+              "type": "string",
+              "description": "Optional flash size override, such as 4MB, 8MB, or 16MB.",
+              "default": ""
+            },
+            "memory_type": {
+              "type": "string",
+              "description": "Optional Arduino memory type override. Leave empty to use preset.",
+              "default": ""
+            },
+            "partitions": {
+              "type": "string",
+              "description": "Optional PlatformIO partition CSV override. Leave empty to use preset.",
+              "default": ""
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "esp_generate_project",
+        "description": "Generate a PlatformIO Arduino project for an ESP-series board. The project can include optional helper functions for I2C, OLED, LED, buzzer, AHT20, and structured serial logs; peripherals are only used when explicitly configured or called.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "project_name": {
+              "type": "string",
+              "description": "Project directory name under the generated workspace.",
+              "default": "embex_task"
+            },
+            "board_model": {
+              "type": "string",
+              "description": "Human board/module model id, such as esp32-s3-n16r8, esp32-s3-n8r8, esp32-s3-n8, luatos-esp32c3-core, esp32-c3-devkitm-1, esp32-c3-devkitc-02, esp32-devkit-v1, or esp32-wrover. Used to resolve PlatformIO board, flash, PSRAM, USB CDC, and partitions.",
+              "default": "luatos-esp32c3-core"
+            },
+            "board": {
+              "type": "string",
+              "description": "PlatformIO board id.",
+              "default": "esp32-c3-devkitm-1"
+            },
+            "flash_size": {
+              "type": "string",
+              "description": "ESP module flash size. Default matches selected ESP board.",
+              "default": "4MB"
+            },
+            "memory_type": {
+              "type": "string",
+              "description": "Arduino memory type. Leave empty unless the selected ESP board preset requires a memory type override.",
+              "default": ""
+            },
+            "partitions": {
+              "type": "string",
+              "description": "Partition table CSV. Default uses the selected board preset partition layout.",
+              "default": "default.csv"
+            },
+            "sda_pin": {
+              "type": "integer",
+              "description": "I2C SDA GPIO for configured I2C peripherals. Use -1 when I2C is not configured.",
+              "default": -1
+            },
+            "scl_pin": {
+              "type": "integer",
+              "description": "I2C SCL GPIO for configured I2C peripherals. Use -1 when I2C is not configured.",
+              "default": -1
+            },
+            "oled_reset_pin": {
+              "type": "integer",
+              "description": "OLED RES pin GPIO. Use -1 if tied to reset or not controlled.",
+              "default": -1
+            },
+            "oled_dc_pin": {
+              "type": "integer",
+              "description": "OLED DC pin GPIO. Required for 6-pin SPI OLED modules; use -1 for I2C OLED or when not configured.",
+              "default": -1
+            },
+            "led_pin": {
+              "type": "integer",
+              "description": "External LED GPIO.",
+              "default": -1
+            },
+            "buzzer_pin": {
+              "type": "integer",
+              "description": "Passive buzzer driver GPIO.",
+              "default": -1
+            },
+            "workspace": {
+              "type": "string",
+              "description": "Optional output workspace path. Defaults to .esp_agent/projects under the user home."
+            },
+            "oled_clk_pin": {
+              "type": "integer",
+              "description": "Dedicated SPI OLED CLK/SCK GPIO. Use -1 when not configured.",
+              "default": -1
+            },
+            "oled_mosi_pin": {
+              "type": "integer",
+              "description": "Dedicated SPI OLED MOSI/DIN GPIO. Use -1 when not configured.",
+              "default": -1
+            },
+            "oled_protocol": {
+              "type": "string",
+              "description": "OLED protocol: spi, i2c, or auto.",
+              "enum": [
+                "auto",
+                "i2c",
+                "spi"
+              ],
+              "default": "auto"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "esp_run_firmware_task",
+        "description": "Run generate -> compile -> optional flash -> optional monitor for an arbitrary user-described ESP firmware task, such as LED control, AHT20 reading, OLED display, or buzzer melody.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "task": {
+              "type": "string",
+              "description": "Optional task hint. Use auto for natural-language inference, custom when custom_code is provided.",
+              "default": "auto"
+            },
+            "task_description": {
+              "type": "string",
+              "description": "Natural-language firmware goal, such as turn on LED, read AHT20, show OLED text, or play a melody."
+            },
+            "custom_code": {
+              "type": "string",
+              "description": "Optional complete Arduino main.cpp generated and controlled by the model. The generated project always includes src/agent_peripherals.h/cpp; the model may include agent_peripherals.h and call helper APIs such as agentInit, oledShowChinese, ledSet, buzzerBeep, and aht20Read.",
+              "default": ""
+            },
+            "project_name": {
+              "type": "string",
+              "description": "Project directory name. If omitted, a task-specific name is generated."
+            },
+            "board_model": {
+              "type": "string",
+              "description": "Human board/module model id, such as esp32-s3-n16r8, esp32-s3-n8r8, esp32-s3-n8, luatos-esp32c3-core, esp32-c3-devkitm-1, esp32-c3-devkitc-02, esp32-devkit-v1, or esp32-wrover. Used to resolve PlatformIO board, flash, PSRAM, USB CDC, and partitions.",
+              "default": "luatos-esp32c3-core"
+            },
+            "board": {
+              "type": "string",
+              "description": "Optional raw PlatformIO board id override. Leave empty to use board_model preset.",
+              "default": ""
+            },
+            "flash_size": {
+              "type": "string",
+              "default": "4MB"
+            },
+            "memory_type": {
+              "type": "string",
+              "default": ""
+            },
+            "partitions": {
+              "type": "string",
+              "default": "default.csv"
+            },
+            "sda_pin": {
+              "type": "integer",
+              "default": -1
+            },
+            "scl_pin": {
+              "type": "integer",
+              "default": -1
+            },
+            "oled_clk_pin": {
+              "type": "integer",
+              "description": "Dedicated SPI OLED CLK/SCK GPIO. Required when oled_protocol=spi; use -1 when SPI OLED is not configured.",
+              "default": -1
+            },
+            "oled_mosi_pin": {
+              "type": "integer",
+              "description": "Dedicated SPI OLED MOSI/DIN GPIO. Required when oled_protocol=spi; use -1 when SPI OLED is not configured.",
+              "default": -1
+            },
+            "oled_reset_pin": {
+              "type": "integer",
+              "default": -1
+            },
+            "oled_dc_pin": {
+              "type": "integer",
+              "default": -1
+            },
+            "oled_protocol": {
+              "type": "string",
+              "description": "OLED protocol: spi for 6-pin SCL/SDA/RES/DC modules, i2c for 4-pin I2C modules, auto to infer from DC pin.",
+              "enum": [
+                "auto",
+                "i2c",
+                "spi"
+              ],
+              "default": "auto"
+            },
+            "led_pin": {
+              "type": "integer",
+              "default": -1
+            },
+            "buzzer_pin": {
+              "type": "integer",
+              "default": -1
+            },
+            "oled_text": {
+              "type": "string",
+              "description": "Text to show on OLED when the selected/generated task uses display output.",
+              "default": "Hello from Embex"
+            },
+            "port": {
+              "type": "string",
+              "description": "Optional serial port. If omitted, flash and monitor are skipped."
+            },
+            "compile_timeout_sec": {
+              "type": "integer",
+              "description": "Build timeout in seconds.",
+              "default": 600
+            },
+            "upload_timeout_sec": {
+              "type": "integer",
+              "description": "Upload timeout in seconds.",
+              "default": 180
+            },
+            "monitor_seconds": {
+              "type": "number",
+              "description": "Serial monitor duration in seconds.",
+              "default": 8.0
+            }
+          },
+          "required": [
+            "task_description"
+          ]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "esp_generate_firmware_task_project",
+        "description": "Generate a PlatformIO Arduino project for a user-described ESP firmware task. The application main.cpp is model-owned or planner-owned, while src/agent_peripherals.h/cpp provides optional helper functions for OLED, LED, buzzer, AHT20, and heartbeat logs.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "task": {
+              "type": "string",
+              "description": "Optional task hint. Use auto for natural-language inference, custom when custom_code is provided.",
+              "default": "auto"
+            },
+            "task_description": {
+              "type": "string",
+              "description": "Natural-language firmware goal, such as turn on LED, read AHT20, show OLED text, or play a melody."
+            },
+            "custom_code": {
+              "type": "string",
+              "description": "Optional complete Arduino main.cpp generated and controlled by the model. The generated project always includes src/agent_peripherals.h/cpp; the model may include agent_peripherals.h and call helper APIs such as agentInit, oledShowChinese, ledSet, buzzerBeep, and aht20Read.",
+              "default": ""
+            },
+            "project_name": {
+              "type": "string",
+              "description": "Project directory name. If omitted, a task-specific name is generated."
+            },
+            "board_model": {
+              "type": "string",
+              "description": "Human board/module model id, such as esp32-s3-n16r8, esp32-s3-n8r8, esp32-s3-n8, luatos-esp32c3-core, esp32-c3-devkitm-1, esp32-c3-devkitc-02, esp32-devkit-v1, or esp32-wrover. Used to resolve PlatformIO board, flash, PSRAM, USB CDC, and partitions.",
+              "default": "luatos-esp32c3-core"
+            },
+            "board": {
+              "type": "string",
+              "description": "PlatformIO board id.",
+              "default": "esp32-c3-devkitm-1"
+            },
+            "flash_size": {
+              "type": "string",
+              "default": "4MB"
+            },
+            "memory_type": {
+              "type": "string",
+              "default": ""
+            },
+            "partitions": {
+              "type": "string",
+              "default": "default.csv"
+            },
+            "sda_pin": {
+              "type": "integer",
+              "default": -1
+            },
+            "scl_pin": {
+              "type": "integer",
+              "default": -1
+            },
+            "oled_clk_pin": {
+              "type": "integer",
+              "description": "Dedicated SPI OLED CLK/SCK GPIO. Required when oled_protocol=spi; use -1 when SPI OLED is not configured.",
+              "default": -1
+            },
+            "oled_mosi_pin": {
+              "type": "integer",
+              "description": "Dedicated SPI OLED MOSI/DIN GPIO. Required when oled_protocol=spi; use -1 when SPI OLED is not configured.",
+              "default": -1
+            },
+            "oled_reset_pin": {
+              "type": "integer",
+              "default": -1
+            },
+            "oled_dc_pin": {
+              "type": "integer",
+              "default": -1
+            },
+            "oled_protocol": {
+              "type": "string",
+              "description": "OLED protocol: spi for 6-pin SCL/SDA/RES/DC modules, i2c for 4-pin I2C modules, auto to infer from DC pin.",
+              "enum": [
+                "auto",
+                "i2c",
+                "spi"
+              ],
+              "default": "auto"
+            },
+            "led_pin": {
+              "type": "integer",
+              "default": -1
+            },
+            "buzzer_pin": {
+              "type": "integer",
+              "default": -1
+            },
+            "oled_text": {
+              "type": "string",
+              "description": "Text to show on OLED when the selected/generated task uses display output.",
+              "default": "Hello from Embex"
+            },
+            "workspace": {
+              "type": "string",
+              "description": "Optional output workspace path. Defaults to .esp_agent/projects under the user home."
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "esp_compile_project",
+        "description": "Run PlatformIO build for a generated ESP PlatformIO project and summarize build errors.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "project_dir": {
+              "type": "string",
+              "description": "PlatformIO project directory."
+            },
+            "timeout_seconds": {
+              "type": "integer",
+              "description": "Build timeout in seconds.",
+              "default": 600
+            }
+          },
+          "required": [
+            "project_dir"
+          ]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "esp_validate_gpio",
+        "description": "Validate ESP GPIO choices for range, duplicate assignments, USB pins, strapping pins, flash/PSRAM risks, and JTAG caveats before generating or flashing firmware.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "board_model": {
+              "type": "string",
+              "description": "ESP board model used for family-specific GPIO validation, such as esp32-s3-n16r8, luatos-esp32c3-core, or esp8266-nodemcuv2.",
+              "default": "luatos-esp32c3-core"
+            },
+            "sda_pin": {
+              "type": "integer",
+              "default": 8
+            },
+            "scl_pin": {
+              "type": "integer",
+              "default": 9
+            },
+            "oled_clk_pin": {
+              "type": "integer",
+              "description": "Dedicated SPI OLED CLK/SCK GPIO. Use -1 when not configured.",
+              "default": -1
+            },
+            "oled_mosi_pin": {
+              "type": "integer",
+              "description": "Dedicated SPI OLED MOSI/DIN GPIO. Use -1 when not configured.",
+              "default": -1
+            },
+            "oled_reset_pin": {
+              "type": "integer",
+              "default": -1
+            },
+            "oled_dc_pin": {
+              "type": "integer",
+              "default": -1
+            },
+            "led_pin": {
+              "type": "integer",
+              "default": 2
+            },
+            "buzzer_pin": {
+              "type": "integer",
+              "default": 4
+            },
+            "oled_protocol": {
+              "type": "string",
+              "description": "OLED protocol: spi, i2c, or auto.",
+              "enum": [
+                "auto",
+                "i2c",
+                "spi"
+              ],
+              "default": "auto"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "esp_flash_project",
+        "description": "Upload a compiled ESP PlatformIO project to the board.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "project_dir": {
+              "type": "string",
+              "description": "PlatformIO project directory."
+            },
+            "port": {
+              "type": "string",
+              "description": "Optional serial port, such as COM5."
+            },
+            "timeout_seconds": {
+              "type": "integer",
+              "description": "Upload timeout in seconds.",
+              "default": 180
+            }
+          },
+          "required": [
+            "project_dir"
+          ]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "esp_monitor_serial",
+        "description": "Read ESP serial output for a fixed duration.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "port": {
+              "type": "string",
+              "description": "Serial port, such as COM5."
+            },
+            "baud": {
+              "type": "integer",
+              "description": "Serial baud rate.",
+              "default": 115200
+            },
+            "seconds": {
+              "type": "number",
+              "description": "Capture duration in seconds.",
+              "default": 8
+            }
+          },
+          "required": [
+            "port"
+          ]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "esp_list_serial_ports",
+        "description": "List serial ports visible to pyserial for ESP upload and monitoring.",
+        "parameters": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "esp_preflight",
+        "description": "Check Python, pyserial, PlatformIO, serial ports, diagnosis self-test, and USB-UART readiness before hardware bring-up.",
+        "parameters": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "esp_diagnose_log",
+        "description": "Diagnose ESP build, flash, or serial logs and produce evidence-based next actions.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "log": {
+              "type": "string",
+              "description": "Combined build, upload, or serial log."
+            }
+          },
+          "required": [
+            "log"
+          ]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "esp_task_observation_check",
+        "description": "Check task-level serial evidence. Prefer task_observation_check from firmware runs for arbitrary tasks; do not require unrelated fixed peripherals.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "log": {
+              "type": "string",
+              "description": "ESP serial log captured after flashing."
+            },
+            "task_description": {
+              "type": "string",
+              "description": "Current user task description used to decide which runtime evidence matters.",
+              "default": ""
+            }
+          },
+          "required": [
+            "log"
+          ]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "esp_run_closed_loop",
+        "description": "Run generate -> compile -> optional flash -> optional monitor -> diagnose for an ESP workflow.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "project_name": {
+              "type": "string",
+              "default": "embex_task"
+            },
+            "board_model": {
+              "type": "string",
+              "description": "Human board/module model id, such as esp32-s3-n16r8, esp32-s3-n8r8, esp32-s3-n8, luatos-esp32c3-core, esp32-c3-devkitm-1, esp32-c3-devkitc-02, esp32-devkit-v1, or esp32-wrover. Used to resolve PlatformIO board, flash, PSRAM, USB CDC, and partitions.",
+              "default": "luatos-esp32c3-core"
+            },
+            "board": {
+              "type": "string",
+              "description": "Optional raw PlatformIO board id override. Leave empty to use board_model preset.",
+              "default": ""
+            },
+            "port": {
+              "type": "string",
+              "description": "Optional serial port. If omitted, flash and monitor are skipped."
+            },
+            "flash_size": {
+              "type": "string",
+              "default": "4MB"
+            },
+            "memory_type": {
+              "type": "string",
+              "default": ""
+            },
+            "partitions": {
+              "type": "string",
+              "default": "default.csv"
+            },
+            "sda_pin": {
+              "type": "integer",
+              "default": 8
+            },
+            "scl_pin": {
+              "type": "integer",
+              "default": 9
+            },
+            "oled_clk_pin": {
+              "type": "integer",
+              "description": "Dedicated SPI OLED CLK/SCK GPIO. Required when oled_protocol=spi; use -1 when SPI OLED is not configured.",
+              "default": -1
+            },
+            "oled_mosi_pin": {
+              "type": "integer",
+              "description": "Dedicated SPI OLED MOSI/DIN GPIO. Required when oled_protocol=spi; use -1 when SPI OLED is not configured.",
+              "default": -1
+            },
+            "oled_reset_pin": {
+              "type": "integer",
+              "default": -1
+            },
+            "oled_dc_pin": {
+              "type": "integer",
+              "default": -1
+            },
+            "oled_protocol": {
+              "type": "string",
+              "description": "OLED protocol: spi for 6-pin SCL/SDA/RES/DC modules, i2c for 4-pin I2C modules, auto to infer from DC pin.",
+              "enum": [
+                "auto",
+                "i2c",
+                "spi"
+              ],
+              "default": "auto"
+            },
+            "led_pin": {
+              "type": "integer",
+              "default": 2
+            },
+            "buzzer_pin": {
+              "type": "integer",
+              "default": 4
+            },
+            "compile_timeout_sec": {
+              "type": "integer",
+              "description": "Build timeout in seconds.",
+              "default": 600
+            },
+            "upload_timeout_sec": {
+              "type": "integer",
+              "description": "Upload timeout in seconds.",
+              "default": 180
+            },
+            "monitor_seconds": {
+              "type": "number",
+              "description": "Serial monitor duration in seconds.",
+              "default": 8.0
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+

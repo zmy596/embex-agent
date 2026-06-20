@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "updated_at": "2026-06-19T00:00:00.000Z",
+  "mcps": [
+    {
+      "name": "filesystem",
+      "title": "文件系统 MCP",
+      "enabled": true,
+      "description": "读取项目文件、写入生成代码、管理知识库文件。",
+      "stage": "active",
+      "category": "project",
+      "capabilities": [
+        "read_files",
+        "write_files",
+        "manage_knowledge_files"
+      ],
+      "invocation": "/filesystem"
+    },
+    {
+      "name": "git",
+      "title": "Git MCP",
+      "enabled": true,
+      "description": "查看改动、生成提交说明、辅助版本管理。",
+      "stage": "active",
+      "category": "version_control",
+      "capabilities": [
+        "status",
+        "diff",
+        "commit"
+      ],
+      "invocation": "/git"
+    },
+    {
+      "name": "project_analysis",
+      "title": "项目分析 MCP",
+      "enabled": true,
+      "description": "读取项目结构、依赖、配置和文档摘要，辅助复杂嵌入式项目规划。",
+      "stage": "active",
+      "category": "project",
+      "capabilities": [
+        "project_structure",
+        "dependency_summary",
+        "document_summary"
+      ],
+      "invocation": "/project_analysis"
+    },
+    {
+      "name": "serial_hardware",
+      "title": "串口与硬件 MCP",
+      "enabled": true,
+      "description": "列出串口、读取串口日志、执行硬件探测。",
+      "stage": "active",
+      "category": "hardware",
+      "capabilities": [
+        "list_ports",
+        "probe_serial",
+        "monitor_serial"
+      ],
+      "invocation": "/serial_hardware"
+    }
+  ]
+}

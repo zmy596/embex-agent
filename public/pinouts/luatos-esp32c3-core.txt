@@ -1,0 +1,2 @@
+﻿This placeholder records the official source URL for LuatOS ESP32C3 CORE pin layout:
+https://wiki.luatos.org/chips/esp32c3/board.html

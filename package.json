@@ -1,0 +1,57 @@
+{
+  "name": "embex",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:client": "vite --host 127.0.0.1",
+    "dev:server": "tsx watch server/index.ts",
+    "build": "tsc -b && vite build",
+    "capability:smoke": "tsx scripts/capability-invocation-smoke.mjs",
+    "task:observe": "node scripts/task-observation-check.mjs",
+    "hardware:preflight": "node scripts/hardware-preflight.mjs",
+    "hardware:readiness": "node scripts/hardware-readiness.mjs",
+    "hardware:run": "node scripts/hardware-run.mjs",
+    "hardware:usb": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/usb-uart-diagnose.ps1 -Summary",
+    "integration:smoke": "tsx scripts/integration-smoke.mjs",
+    "knowledge:smoke": "tsx scripts/knowledge-smoke.mjs",
+    "memory:smoke": "tsx scripts/memory-smoke.mjs",
+    "mcp:smoke": "tsx scripts/mcp-smoke.mjs",
+    "skill:smoke": "tsx scripts/skill-smoke.mjs",
+    "preview": "vite preview --host 127.0.0.1",
+    "setup:conda": "powershell -ExecutionPolicy Bypass -File scripts/setup-conda-env.ps1",
+    "serial:probe": "node scripts/probe-serial-port.mjs",
+    "skill:verify": "node scripts/verify-skill-contract.mjs",
+    "start": "tsx server/index.ts",
+    "smoke": "node scripts/smoke-test.mjs --suite=api",
+    "smoke:api": "node scripts/smoke-test.mjs --suite=api",
+    "smoke:compile": "node scripts/smoke-test.mjs --suite=compile",
+    "smoke:all": "node scripts/smoke-test.mjs --suite=all",
+    "typecheck": "tsc --noEmit",
+    "verify": "node scripts/verify.mjs"
+  },
+  "dependencies": {
+    "@langchain/openai": "^1.4.7",
+    "@vitejs/plugin-react": "^5.0.0",
+    "concurrently": "^9.2.1",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "langchain": "^1.4.5",
+    "lucide-react": "^0.468.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.5",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9"
+  }
+}
+

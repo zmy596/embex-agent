@@ -1,0 +1,2 @@
+﻿This placeholder records the official source URL for ESP32 DevKitC / ESP32 DevKit V1 class pin layout:
+https://docs.espressif.com/projects/esp-idf/en/v5.1/esp32/hw-reference/esp32/get-started-devkitc.html#header-block

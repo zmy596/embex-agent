@@ -1,0 +1,2 @@
+﻿This placeholder records the source URL for ESP8266 NodeMCU pin layout:
+https://arduino-esp8266.readthedocs.io/en/latest/boards.html#nodemcu-1-0-esp-12e-module

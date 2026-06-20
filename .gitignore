@@ -1,0 +1,42 @@
+node_modules/
+dist/
+*.tsbuildinfo
+__pycache__/
+*.pyc
+*.log
+*.zip
+.tmp*/
+.tmp-*.log
+.tmp-*.err
+.codex-run/
+~$*
+**/~$*
+garycli/.tmp*/
+.env
+runs/
+condaenv.*.requirements.txt
+gpt-image-2-output/
+public/cam/
+tools/create_embex_opening_title.py
+
+# Generated local hardware/firmware scratch projects.
+.tmp-direct-*/
+.tmp-hardware-*/
+.tmp-cam-server.log
+
+# Keep source docs, but avoid committing bulky rendered QA folders by default.
+比赛提交材料/*_render_QA/
+比赛提交材料/*_pdf_render_QA/
+比赛提交材料.zip
+
+# ChipWiz local runtime data. Keep README/.gitkeep files, but do not commit
+# uploaded RAG documents, generated indexes, or persisted conversation memory.
+esp_agent/knowledge/rag/*
+!esp_agent/knowledge/rag/README.md
+!esp_agent/knowledge/rag/documents/
+esp_agent/knowledge/rag/documents/*
+!esp_agent/knowledge/rag/documents/*.md
+!esp_agent/knowledge/rag/documents/.gitkeep
+memory/*
+!memory/README.md
+!memory/.gitkeep

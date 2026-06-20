@@ -1,0 +1,2 @@
+﻿This placeholder records the official source URL for ESP32-C3-DevKitC-02 pin layout:
+https://docs.espressif.com/projects/esp-idf/en/v5.0/esp32c3/hw-reference/esp32c3/user-guide-devkitc-02.html#header-block
