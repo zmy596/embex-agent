@@ -42,16 +42,9 @@ docs/
 GITHUB_PROJECT_FILES.md
 ```
 
-### 比赛复现说明
+### 竞赛复现说明
 
-建议上传 Markdown 文档：
-
-```text
-比赛提交材料/可复现软件成果说明.md
-比赛提交材料/依赖库文件.md
-```
-
-论文、PPT、视频、PDF 等大文件建议放到 GitHub Release 或比赛提交系统，不建议直接塞进主仓库历史。
+竞赛相关说明已集中写入 `README.zh-CN.md` 和 `README.en.md`，不再单独设立竞赛文档。论文、PPT、视频、PDF 等大文件建议放到 GitHub Release 或比赛提交系统，不建议直接塞进主仓库历史。
 
 ## 不建议上传的文件
 
@@ -95,8 +88,7 @@ rg -n "api[_-]?key|token|secret|sk-" . -g "!node_modules" -g "!.git"
 ## 首次上传 GitHub
 
 ```powershell
-git add README.md LICENSE CONTRIBUTING.md SECURITY.md CODE_OF_CONDUCT.md GITHUB_PROJECT_FILES.md docs .github requirements.txt setup.ps1 .gitignore package.json package-lock.json environment.yml .env.example src server esp_agent scripts index.html vite.config.ts tsconfig.json tsconfig.app.json tsconfig.node.json
-git add 比赛提交材料/可复现软件成果说明.md 比赛提交材料/依赖库文件.md
+git add README.md README.zh-CN.md README.en.md LICENSE CONTRIBUTING.md SECURITY.md CODE_OF_CONDUCT.md GITHUB_PROJECT_FILES.md docs .github requirements.txt setup.ps1 .gitignore package.json package-lock.json environment.yml .env.example src server esp_agent scripts index.html vite.config.ts tsconfig.json tsconfig.app.json tsconfig.node.json
 git commit -m "docs: prepare GitHub reproducible release"
 git branch -M main
 git remote add origin https://github.com/<your-name>/embex.git
@@ -109,4 +101,3 @@ git push -u origin main
 git remote set-url origin https://github.com/<your-name>/embex.git
 git push -u origin main
 ```
-

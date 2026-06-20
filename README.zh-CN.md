@@ -48,15 +48,15 @@ Embex 不是固定 demo 生成器。模型拥有固件主逻辑控制权，`agen
 | `esp_agent/knowledge/` | 板卡引脚资料和本地 RAG 知识库 |
 | `memory/` | 本地记忆目录说明 |
 | `scripts/` | smoke 测试、硬件预检、串口探测和验证脚本 |
-| `docs/` | GitHub 复现、上传和竞赛说明 |
+| `docs/` | GitHub 复现与上传说明 |
 
 ## 快速开始
 
 ### 1. 克隆项目
 
 ```powershell
-git clone https://github.com/<your-name>/embex.git
-cd embex
+git clone tps://github.com/zmy596/embex-agent，git
+cd embex-agent
 ```
 
 ### 2. 一键配置环境
@@ -118,6 +118,36 @@ http://127.0.0.1:5173/
 |---|---|
 | Web 前端 | `http://127.0.0.1:5173/` |
 | 后端 API | `http://127.0.0.1:8787/` |
+
+## 完整环境配置链路
+
+Embex 的依赖分为 Node/TypeScript、Python/PlatformIO、ESP 底层工具链三层。推荐按以下顺序配置：
+
+```powershell
+cd Embex-GitHub-Release
+npm install
+python -m pip install -r requirements.txt
+Copy-Item .env.example .env
+npm run dev
+```
+
+如果需要严格复现 Node 依赖版本，使用：
+
+```powershell
+npm ci
+```
+
+其中：
+
+| 依赖文件或机制 | 作用 |
+|---|---|
+| `package.json` | Web 前端、Express 后端、LangChain JS、React、Vite、TypeScript 等 Node 依赖 |
+| `package-lock.json` | 锁定 Node 依赖版本，便于复现 |
+| `requirements.txt` | Python 工具层依赖，包括 PlatformIO 和 pyserial |
+| `environment.yml` | 可选 Conda 环境说明，默认安装链路不强制使用 |
+| PlatformIO 首次编译 | 自动下载 ESP 平台包、Arduino framework、esptool、RISC-V/Xtensa 工具链和板卡支持包 |
+
+`requirements.txt` 只记录 Python 侧依赖。LangChain 使用的是 JavaScript/TypeScript 版本，因此声明在 `package.json` 中。
 
 ## 依赖环境
 
@@ -182,6 +212,64 @@ npm run verify
 
 说明：硬件验证结果取决于开发板、USB-UART 驱动、串口占用和实际接线。
 
+
+### 项目创新点
+
+- 记忆增强：保存硬件状态、历史对话、用户偏好、项目事实、失败案例和已验证结论，并通过上下文压缩减少长对话带来的信息噪声。
+- RAG 知识库：沉淀 ESP 板卡资料、GPIO 风险、外设规则、PlatformIO 工作流、烧录失败、串口异常、watchdog、brownout 等嵌入式开发知识。
+- Skill / MCP 扩展：将引脚分析、工程扫描、串口工具、Git、文件系统、日志诊断等能力封装为可管理、可调用、可展示的能力模块。
+- 模型主导固件：`main.cpp` 由模型根据任务和硬件配置生成，辅助函数库只提供可选驱动能力，不用固定 demo 模板替代模型决策。
+- 闭环工具链：将 PlatformIO 工程生成、编译、烧录、串口监控、日志诊断和任务验收串成统一 ReAct 流程。
+- 状态可追踪：Web 页面展示任务阶段、工具调用、失败节点、串口观测和验收判断，便于复现和答辩说明。
+
+### 软件成果可复现范围
+
+本仓库包含可复现的软件成果：
+
+| 内容 | 文件或目录 |
+|---|---|
+| Web 前端 | `src/` |
+| 后端 API 与智能体编排 | `server/` |
+| ESP 工具层 | `esp_agent/tools/` |
+| RAG 初始知识库 | `esp_agent/knowledge/rag/documents/` |
+| 板卡引脚资料 | `esp_agent/knowledge/board_pinouts/`、`public/pinouts/` |
+| Skill / MCP 注册与实现 | `server/skills/`、`server/mcp/`、`esp_agent/skills/` |
+| 本地记忆目录说明 | `memory/` |
+| 验证脚本 | `scripts/` |
+| 依赖与环境 | `package.json`、`package-lock.json`、`requirements.txt`、`environment.yml`、`setup.ps1` |
+
+不提交 `.env`、`node_modules/`、`dist/`、`runs/`、临时固件工程、串口日志和本地大文件。评审或复现人员应通过安装命令重新生成依赖和构建产物。
+
+### 推荐验收步骤
+
+```powershell
+npm install
+python -m pip install -r requirements.txt
+Copy-Item .env.example .env
+npm run build
+npm run smoke:api
+npm run integration:smoke
+npm run dev
+```
+
+打开：
+
+```text
+http://127.0.0.1:5173/
+```
+
+如果连接真实 ESP 开发板，可继续执行：
+
+```powershell
+npm run hardware:preflight
+npm run hardware:readiness
+npm run serial:probe -- --port COM12
+```
+
+完整硬件闭环需要本地 USB 串口、开发板、驱动和正确接线。公网 Web 页面无法直接访问用户本机 COM 口，因此完整编译、烧录、串口监控建议本地复现。
+
+
+
 ## 示例任务
 
 OLED：
@@ -208,34 +296,8 @@ LED：
 请诊断这段烧录日志：Invalid head of packet 0x45
 ```
 
-## 竞赛复现材料
 
-- `docs/competition/reproducible-software-artifact.zh-CN.md`
-- `docs/competition/dependencies.zh-CN.md`
-- `docs/REPRODUCIBILITY.md`
-- `docs/GITHUB_UPLOAD.md`
-- `docs/COMPETITION_SUBMISSION.md`
-
-## 为什么完整闭环需要本地运行
-
-Embex 可以部署公网 Web 演示版，但完整 ESP 编译、烧录和串口监控需要访问用户本机 COM 口和开发板。因此完整硬件闭环建议通过 GitHub 克隆后在本地运行。
-
-推荐公开方式：
-
-```text
-GitHub 仓库：源码、文档、复现脚本
-本地运行：完整 PlatformIO 编译/烧录/串口闭环
-公网演示：Web UI、RAG、记忆、日志诊断、软件侧流程
-```
-
-## 安全说明
-
-- 不要提交 `.env` 或 API key；
-- 不要提交 `node_modules/`、`dist/`、`runs/`、临时固件工程或本地日志；
-- 发布串口日志前应检查是否包含本地路径、设备 ID 或隐私信息；
-- 烧录硬件前应确认板卡型号、串口、供电、GND、启动脚和外设接线。
 
 ## License
 
 MIT License. See [LICENSE](LICENSE).
-

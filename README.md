@@ -9,7 +9,4 @@
 
 - [Reproducibility Guide](docs/REPRODUCIBILITY.md)
 - [GitHub Upload Checklist](docs/GITHUB_UPLOAD.md)
-- [Competition Submission Notes](docs/COMPETITION_SUBMISSION.md)
-- [中文依赖库文件](docs/competition/dependencies.zh-CN.md)
-- [中文可复现软件成果说明](docs/competition/reproducible-software-artifact.zh-CN.md)
-
+- Competition submission, dependency description, and reproducible software artifact notes are integrated into the language-specific README files.

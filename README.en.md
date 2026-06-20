@@ -48,7 +48,7 @@ Typical peripherals:
 | `esp_agent/knowledge/` | Board pinouts and local RAG knowledge base |
 | `memory/` | Local memory directory metadata |
 | `scripts/` | Smoke tests, hardware readiness checks, serial probe, and verification scripts |
-| `docs/` | GitHub reproducibility, upload, and competition notes |
+| `docs/` | GitHub reproducibility and upload notes |
 
 ## Quick Start
 
@@ -119,6 +119,36 @@ Default services:
 | Web UI | `http://127.0.0.1:5173/` |
 | API | `http://127.0.0.1:8787/` |
 
+## Full Environment Setup Chain
+
+Embex dependencies are split into three layers: Node/TypeScript, Python/PlatformIO, and ESP low-level toolchains. Recommended setup:
+
+```powershell
+cd Embex-GitHub-Release
+npm install
+python -m pip install -r requirements.txt
+Copy-Item .env.example .env
+npm run dev
+```
+
+For strict Node dependency reproduction:
+
+```powershell
+npm ci
+```
+
+Dependency responsibility:
+
+| File or mechanism | Purpose |
+|---|---|
+| `package.json` | Web UI, Express backend, LangChain JS, React, Vite, TypeScript, and other Node dependencies |
+| `package-lock.json` | Locked Node dependency versions |
+| `requirements.txt` | Python tool-layer dependencies, including PlatformIO and pyserial |
+| `environment.yml` | Optional Conda environment description; not required by the default setup path |
+| First PlatformIO build | Automatically downloads ESP platform packages, Arduino framework, esptool, RISC-V/Xtensa toolchains, and board support packages |
+
+`requirements.txt` only records Python dependencies. LangChain is used through the JavaScript/TypeScript packages declared in `package.json`.
+
 ## Environment
 
 Python dependencies:
@@ -182,6 +212,78 @@ npm run verify
 
 Hardware verification depends on the connected board, USB-UART driver, serial port, and wiring.
 
+## Competition Submission and Reproducibility
+
+Project title:
+
+```text
+Embex: Memory-Augmented Agentic Closed-Loop Compile and Debug Platform for ESP Development
+```
+
+Embex is positioned as an agentic closed-loop development platform for ESP-series embedded systems. It combines a Web interface, LLM-driven ReAct decisions, local RAG knowledge, long-term memory, Skill/MCP capabilities, and the PlatformIO toolchain to complete the loop from natural-language task input to firmware generation, build, upload, serial observation, log diagnosis, task acceptance, and revision.
+
+### Competition Highlights
+
+- Memory augmentation: persists hardware state, conversation history, user preferences, project facts, failure cases, and verified results, while using context compression to reduce long-session noise.
+- RAG knowledge base: stores ESP board knowledge, GPIO risk rules, peripheral notes, PlatformIO workflows, upload failures, serial issues, watchdog, brownout, and debugging experience.
+- Skill / MCP extension layer: exposes pin analysis, project scanning, serial tools, Git, filesystem, and log diagnosis as manageable and traceable capabilities.
+- Model-owned firmware: the model generates `main.cpp` according to the task and hardware configuration; helper libraries only provide optional driver functions instead of replacing model decisions with fixed demos.
+- Closed-loop toolchain: connects PlatformIO project generation, build, upload, serial monitoring, log diagnosis, and task acceptance into one ReAct workflow.
+- Traceable execution: the Web UI displays stages, tool calls, failed nodes, serial observations, and acceptance decisions for reproducibility and presentation.
+
+### Reproducible Software Artifact Scope
+
+This repository contains the reproducible software artifact:
+
+| Content | Files or directories |
+|---|---|
+| Web frontend | `src/` |
+| Backend API and agent orchestration | `server/` |
+| ESP tool layer | `esp_agent/tools/` |
+| Initial RAG knowledge base | `esp_agent/knowledge/rag/documents/` |
+| Board pinout knowledge | `esp_agent/knowledge/board_pinouts/`, `public/pinouts/` |
+| Skill / MCP registry and implementations | `server/skills/`, `server/mcp/`, `esp_agent/skills/` |
+| Local memory directory metadata | `memory/` |
+| Verification scripts | `scripts/` |
+| Dependencies and setup | `package.json`, `package-lock.json`, `requirements.txt`, `environment.yml`, `setup.ps1` |
+
+The repository intentionally excludes `.env`, `node_modules/`, `dist/`, `runs/`, temporary firmware projects, serial logs, and local large files. Reviewers should reproduce dependencies and build artifacts through the documented commands.
+
+### Suggested Acceptance Steps
+
+```powershell
+npm install
+python -m pip install -r requirements.txt
+Copy-Item .env.example .env
+npm run build
+npm run smoke:api
+npm run integration:smoke
+npm run dev
+```
+
+Open:
+
+```text
+http://127.0.0.1:5173/
+```
+
+With a real ESP board connected:
+
+```powershell
+npm run hardware:preflight
+npm run hardware:readiness
+npm run serial:probe -- --port COM12
+```
+
+The full hardware loop requires local USB serial access, board drivers, the target board, and correct wiring. A public Web deployment cannot directly access a user's local COM port, so the complete build/upload/serial loop should be reproduced locally.
+
+### Submission Notes
+
+- Put source code, README files, dependency files, setup scripts, knowledge samples, verification scripts, and community files in the GitHub repository.
+- Submit papers, videos, slides, screenshots, and large attachments through the competition submission system or GitHub Releases instead of committing large binaries to the main repository history.
+- A recommended demo should cover the Web UI, hardware configuration, model planning, `main.cpp` generation, build/upload, serial observation, failure diagnosis, and RAG/memory/Skill/MCP pages.
+- Without hardware on site, reviewers can still inspect log diagnosis, knowledge retrieval, memory state, Skill/MCP invocation, and software smoke tests; the full closed loop is reproduced with local hardware.
+
 ## Example Tasks
 
 OLED:
@@ -208,14 +310,6 @@ Log diagnosis:
 请诊断这段烧录日志：Invalid head of packet 0x45
 ```
 
-## Competition Reproducibility
-
-- `docs/competition/reproducible-software-artifact.zh-CN.md`
-- `docs/competition/dependencies.zh-CN.md`
-- `docs/REPRODUCIBILITY.md`
-- `docs/GITHUB_UPLOAD.md`
-- `docs/COMPETITION_SUBMISSION.md`
-
 ## Why Local Execution Is Needed
 
 Embex can be demonstrated as a public Web application, but the full ESP compile/upload/serial loop needs access to the user's local COM port and board. The full hardware loop should be reproduced locally after cloning the GitHub repository.
@@ -238,4 +332,3 @@ Public demo: Web UI, RAG, memory, log diagnosis, software-only workflows
 ## License
 
 MIT License. See [LICENSE](LICENSE).
-
